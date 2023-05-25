@@ -1,15 +1,17 @@
 package modelo;
 
-
 public class BinaryTree {
 	private int value;
 	private BinaryTree left_tree;
 	private BinaryTree right_tree;
+	private BinaryTree father;
+	public boolean found; 
 	
 	public BinaryTree(int value) {
 		this.value = value;
 		this.left_tree = null;
 		this.right_tree = null;
+		this.father = null;
 	}
 	
 	public int getValue() {
@@ -36,43 +38,48 @@ public class BinaryTree {
 		this.right_tree = right_tree;
 	}
 	
+	public BinaryTree getFather() {
+		return father;
+	}
+
+	public void setFather(BinaryTree father) {
+		this.father = father;
+	}
+	
 	public void insertion(int value) {
+		// Caso o valor seja menor que a raiz checa o nó a esquerda
 		if(value < this.value) {
-			if(this.getLeft_tree() == null) {
+			// Caso o nó seja vazio cria uma árvore
+			if(this.left_tree == null) {
 				left_tree = new BinaryTree(value);
+				left_tree.setFather(this);
 			}
+			// Caso já exista um nó faz a chamada recursiva
 			else {
 				left_tree.insertion(value);
 			}
 		}
+		// Caso o valor seja maior que a raiz checa o nó a direita
 		else if(value > this.value) {
+			// Caso o nó seja vazio cria uma árvore
 			if(this.getRight_tree() == null) {
 				right_tree = new BinaryTree(value);
+				right_tree.setFather(this);
 			}
+			// Caso já exista um nó faz a chamada recursiva
 			else {
 				right_tree.insertion(value);
 			}
 		}
 	}
 	
-	public void printTree() {
-			System.out.println("root: " + getValue());
-			if(left_tree != null) {
-				left_tree.printTree();
-			}
-			if(right_tree != null) { 
-				right_tree.printTree();
-			}
-			
-	}
-	
-	// Não funciona como deveria 
+// Não funciona como deveria 
 	public boolean search(int value) {
-		boolean found = false;
-		//System.out.println("Valor: " + getValue());
+		System.out.println("Valor: " + getValue());
 		if(getValue() == value) {
 			System.out.println("metodo: Valor encontrado!!!");
 			found = true;
+			return found;
 		}
 		else {
 			if(left_tree != null) {
@@ -82,35 +89,111 @@ public class BinaryTree {
 				right_tree.search(value);
 			}
 		}
-		
 		return found;
 
 	}
 	
+	public void remove(int value) {
+		if(value == this.value) {
+			//caso 1: não tem filhos
+			if(left_tree == null && right_tree == null) {
+				// Identificando qual nó deve ser eliminado 
+				 if(father.value > value) {
+					 father.left_tree = null;
+				 }
+				 else if(father.value < value) {
+					 father.right_tree = null;
+				 }
+			}
+			
+			// caso 2: tem um filho
+			if(left_tree != null && right_tree == null) {
+				// Avô vira pai
+				left_tree.father = father;
+				// Caso o valor do nó a esquerda seja menor que o valor do pai o nó fica a esquerda
+				if(left_tree.value < father.value) {
+					father.left_tree = left_tree;
+				}
+				// Caso o valor do nó a esquerda seja maior que o valor do pai o nó fica a direita
+				else if(left_tree.value > father.value) {
+					father.right_tree = left_tree;
+				}
+				
+			}
+			if(left_tree == null && right_tree != null) {
+				// Avô vira pai
+				right_tree.father = father;
+				// Caso o valor do nó a direita seja menor que o valor do pai o nó fica a esquerda
+				if(right_tree.value < father.value) {
+					father.left_tree = right_tree;
+				}
+				// Caso o valor do nó a direita seja maior que o valor do pai o nó fica a direita
+				else if(left_tree.value > father.value) {
+					father.right_tree = right_tree;
+				}
+			}
+			// caso 3: tem dois filhos
+			if(left_tree != null && right_tree != null) {
+				//???
+			}
+		}
+		else { 
+			// Chamada da função recursiva
+			if(left_tree != null) {
+				left_tree.remove(value);
+			}
+			// Chamada da função recursiva
+			if(right_tree != null) {
+				right_tree.remove(value);
+			}
+		}
+	}
+	
+	public void printTree() {
+		// Imprime o valor do nó
+		System.out.println("valor: "+ getValue());
+		// Caso o nó a esquerda não seja vazio chama a função recursivamente
+		if(left_tree != null) {
+			left_tree.printTree();
+		}
+		// Caso o nó a direita não seja vazio chama a função recursivamente
+		if(right_tree != null) { 
+			right_tree.printTree();
+		}
+		
+	}
+	
 	public static void main(String[] args) {
-		BinaryTree abb1 = new BinaryTree(10);
+		BinaryTree abb = new BinaryTree(10);
 
 		// árvore 
-		abb1.insertion(8);
-		abb1.insertion(15);
-		abb1.insertion(11);
-		abb1.insertion(20);
-		abb1.insertion(3);
-		abb1.insertion(10);
-		abb1.insertion(17);
-		abb1.insertion(29);
-		abb1.insertion(1);
-	
-		//abb1.printTree();
+		abb.insertion(8);
+		abb.insertion(15);
+		abb.insertion(11);
+		abb.insertion(20);
+		abb.insertion(3);
+		abb.insertion(10);
+		abb.insertion(17);
+		//abb.insertion(29);
+		abb.insertion(1);
+		System.out.println("ARVORE 1");
+		abb.printTree();
+		System.out.println();
+		abb.remove(20);
+		//abb.remove(1);
+		//abb.remove(11);
+		System.out.println("ARVORE 2");
+		abb.printTree();
+		System.out.println();
 		
-		if(abb1.search(11)) {
+		
+		/*if(abb.search(11)) {
 			System.out.println("main: Encontrado!!!");
 		}
 		else {
 			System.out.println("main: Não encontrado!!!");
 		}
-		
-		
+		*/
 		
 	}
 		
