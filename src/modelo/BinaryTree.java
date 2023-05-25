@@ -1,5 +1,8 @@
 package modelo;
 
+import java.util.ArrayList;
+
+
 public class BinaryTree {
 	private int value;
 	private BinaryTree left_tree;
@@ -86,7 +89,7 @@ public class BinaryTree {
 	
 // Não funciona como deveria 
 	public boolean search(int value) {
-		//???
+		return true;
 	}
 	
 	public void remove(int value) {
@@ -145,6 +148,39 @@ public class BinaryTree {
 		}
 	}
 	
+	ArrayList<Integer> values = new ArrayList<Integer>();
+	public boolean isFull() {
+		if(left_tree == null && right_tree == null) {
+			values.add(level);
+		}
+		else if(left_tree != null && right_tree != null) {
+			if(!left_tree.isFull()) {
+				return false;
+			}
+			if(!right_tree.isFull()) {
+				return false;
+			}
+		}
+		else if(left_tree != null && right_tree == null) {
+			return false;
+		}
+		else if(left_tree == null && right_tree != null) {
+			return false;
+		}
+		
+		int aux = 0;
+		for (Integer integer : values) {
+			if(aux == 0){
+				aux = integer.intValue();
+			}
+			if(aux != integer.intValue()) {
+					return false;
+			}
+		}		 
+	
+		return true;
+	}
+	
 	public void printTree() {
 		// Imprime o valor do nó
 		System.out.println("valor: "+ value + " level: " + level);
@@ -166,22 +202,27 @@ public class BinaryTree {
 		abb.insertion(8);
 		abb.insertion(15);
 		abb.insertion(11);
-		abb.insertion(20);
-		abb.insertion(3);
-		abb.insertion(10);
-		abb.insertion(17);
-		abb.insertion(29);
-		abb.insertion(1);;
+		//abb.insertion(20);
+		//abb.insertion(3);
+		//abb.insertion(10);
+		//abb.insertion(17);
+		//abb.insertion(29);
+		//abb.insertion(1);;
 		System.out.println("ARVORE 1");
 		abb.printTree();
 		System.out.println();
 		//abb.remove(20);
 		//abb.remove(1);
 		//abb.remove(11);
-		System.out.println("ARVORE 2");
-		abb.printTree();
-		System.out.println();
-		
+		//System.out.println("ARVORE 2");
+		//abb.printTree();
+		//System.out.println();
+		if(abb.isFull()) {
+			System.out.println("Eh completa!!!");
+		}
+		else {
+			System.out.println("Não eh completa!!!");
+		}
 		
 		/*if(abb.search(11)) {
 			System.out.println("main: Encontrado!!!");
