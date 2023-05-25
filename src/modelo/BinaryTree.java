@@ -89,7 +89,21 @@ public class BinaryTree {
 	
 // Não funciona como deveria 
 	public boolean search(int value) {
-		return true;
+		if(this.value == value) {
+			System.out.println("metodo: VALOR ENCONTRADO!!!");
+			return true;
+		}
+		if(value < this.value && left_tree != null){
+			System.out.println(this.value + " IF 1" + value);
+			return left_tree.search(value);
+		}
+		if(value > this.value && right_tree != null){
+			System.out.println(this.value + " IF 2 " + value);
+			return right_tree.search(value);
+		}
+		else {
+			return false;
+		}
 	}
 	
 	public void remove(int value) {
