@@ -5,13 +5,14 @@ public class BinaryTree {
 	private BinaryTree left_tree;
 	private BinaryTree right_tree;
 	private BinaryTree father;
-	public boolean found; 
+	private int level;
 	
 	public BinaryTree(int value) {
 		this.value = value;
 		this.left_tree = null;
 		this.right_tree = null;
 		this.father = null;
+		this.setLevel(1);
 	}
 	
 	public int getValue() {
@@ -46,6 +47,14 @@ public class BinaryTree {
 		this.father = father;
 	}
 	
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+	
 	public void insertion(int value) {
 		// Caso o valor seja menor que a raiz checa o nó a esquerda
 		if(value < this.value) {
@@ -53,6 +62,7 @@ public class BinaryTree {
 			if(this.left_tree == null) {
 				left_tree = new BinaryTree(value);
 				left_tree.setFather(this);
+				left_tree.level = level+1;
 			}
 			// Caso já exista um nó faz a chamada recursiva
 			else {
@@ -65,6 +75,7 @@ public class BinaryTree {
 			if(this.getRight_tree() == null) {
 				right_tree = new BinaryTree(value);
 				right_tree.setFather(this);
+				right_tree.level = level+1;
 			}
 			// Caso já exista um nó faz a chamada recursiva
 			else {
@@ -75,22 +86,7 @@ public class BinaryTree {
 	
 // Não funciona como deveria 
 	public boolean search(int value) {
-		System.out.println("Valor: " + getValue());
-		if(getValue() == value) {
-			System.out.println("metodo: Valor encontrado!!!");
-			found = true;
-			return found;
-		}
-		else {
-			if(left_tree != null) {
-				left_tree.search(value);
-			}
-			if(right_tree != null) {
-				right_tree.search(value);
-			}
-		}
-		return found;
-
+		//???
 	}
 	
 	public void remove(int value) {
@@ -151,7 +147,7 @@ public class BinaryTree {
 	
 	public void printTree() {
 		// Imprime o valor do nó
-		System.out.println("valor: "+ getValue());
+		System.out.println("valor: "+ value + " level: " + level);
 		// Caso o nó a esquerda não seja vazio chama a função recursivamente
 		if(left_tree != null) {
 			left_tree.printTree();
@@ -174,12 +170,12 @@ public class BinaryTree {
 		abb.insertion(3);
 		abb.insertion(10);
 		abb.insertion(17);
-		//abb.insertion(29);
-		abb.insertion(1);
+		abb.insertion(29);
+		abb.insertion(1);;
 		System.out.println("ARVORE 1");
 		abb.printTree();
 		System.out.println();
-		abb.remove(20);
+		//abb.remove(20);
 		//abb.remove(1);
 		//abb.remove(11);
 		System.out.println("ARVORE 2");
@@ -196,6 +192,6 @@ public class BinaryTree {
 		*/
 		
 	}
-		
+	
 }
 
